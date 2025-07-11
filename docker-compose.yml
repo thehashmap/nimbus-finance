@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  accounts:
+    build: ./accounts
+    image: nimbus-accounts:latest
+    container_name: accounts-service
+    ports:
+      - "8080:8080"
+    depends_on: []
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+  cards:
+    build: ./cards
+    image: nimbus-cards:latest
+    container_name: cards-service
+    ports:
+      - "8081:8081"
+    depends_on: []
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+  loans:
+    build: ./loans
+    image: nimbus-loans:latest
+    container_name: loans-service
+    ports:
+      - "8082:8082"
+    depends_on: []
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+
