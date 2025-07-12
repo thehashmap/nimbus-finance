@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY target/loans-0.0.1-SNAPSHOT.jar loans-0.0.1-SNAPSHOT.jar
 
-EXPOSE 8082
+EXPOSE 8090
 
 ENTRYPOINT ["java","-jar","loans-0.0.1-SNAPSHOT.jar"]
 

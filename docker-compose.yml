@@ -1,30 +1,35 @@
 version: '3.8'
 services:
   accounts:
-    build: ./accounts
-    image: nimbus-accounts:latest
+    image: "thehashmap/accounts:latest"
     container_name: accounts-service
     ports:
       - "8080:8080"
     depends_on: []
     environment:
       - SPRING_PROFILES_ACTIVE=default
+    networks:
+      - nimbus
   cards:
-    build: ./cards
-    image: nimbus-cards:latest
+    image: "thehashmap/cards:latest"
     container_name: cards-service
     ports:
-      - "8081:8081"
+      - "9000:9000"
     depends_on: []
     environment:
       - SPRING_PROFILES_ACTIVE=default
+    networks:
+      - nimbus
   loans:
-    build: ./loans
-    image: nimbus-loans:latest
+    image: "thehashmap/loans:latest"
     container_name: loans-service
     ports:
-      - "8082:8082"
+      - "8090:8090"
     depends_on: []
     environment:
       - SPRING_PROFILES_ACTIVE=default
-
+    networks:
+      - nimbus
+networks:
+  nimbus:
+    driver: "bridge"
