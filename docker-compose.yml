@@ -9,6 +9,11 @@ services:
       - POSTGRES_DB=accountsdb
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - nimbus
   cardsdb:
@@ -20,6 +25,11 @@ services:
       - POSTGRES_DB=cardsdb
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - nimbus
   loansdb:
@@ -31,6 +41,11 @@ services:
       - POSTGRES_DB=loansdb
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - nimbus
   accounts:
@@ -58,7 +73,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=default
       - SPRING_APPLICATION_NAME="cards"
-      - SPRING_DATASOURCE_URL="jdbc:postgresql://cardsdb:5434/cardsdb"
+      - SPRING_DATASOURCE_URL="jdbc:postgresql://cardsdb:5432/cardsdb"
     networks:
       - nimbus
   loans:
@@ -72,7 +87,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=default
       - SPRING_APPLICATION_NAME="loans"
-      - SPRING_DATASOURCE_URL="jdbc:postgresql://loansdb:5433/loansdb"
+      - SPRING_DATASOURCE_URL="jdbc:postgresql://loansdb:5432/loansdb"
     networks:
       - nimbus
 networks:
