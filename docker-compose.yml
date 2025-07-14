@@ -1,13 +1,50 @@
 version: '3.8'
 services:
+  accountsdb:
+    image: "postgres:latest"
+    container_name: accountsdb
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=accountsdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - nimbus
+  cardsdb:
+    image: "postgres:latest"
+    container_name: cardsdb
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_DB=cardsdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - nimbus
+  loansdb:
+    image: "postgres:latest"
+    container_name: loansdb
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=loansdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - nimbus
   accounts:
     image: "thehashmap/accounts:latest"
     container_name: accounts-service
     ports:
       - "8080:8080"
-    depends_on: []
+    depends_on:
+      accountsdb:
+        condition: service_healthy
     environment:
       - SPRING_PROFILES_ACTIVE=default
+      - SPRING_APPLICATION_NAME="accounts"
+      - SPRING_DATASOURCE_URL="jdbc:postgresql://accountsdb:5432/accountsdb"
     networks:
       - nimbus
   cards:
@@ -15,9 +52,13 @@ services:
     container_name: cards-service
     ports:
       - "9000:9000"
-    depends_on: []
+    depends_on:
+      cardsdb:
+        condition: service_healthy
     environment:
       - SPRING_PROFILES_ACTIVE=default
+      - SPRING_APPLICATION_NAME="cards"
+      - SPRING_DATASOURCE_URL="jdbc:postgresql://cardsdb:5434/cardsdb"
     networks:
       - nimbus
   loans:
@@ -25,9 +66,13 @@ services:
     container_name: loans-service
     ports:
       - "8090:8090"
-    depends_on: []
+    depends_on:
+      loansdb:
+        condition: service_healthy
     environment:
       - SPRING_PROFILES_ACTIVE=default
+      - SPRING_APPLICATION_NAME="loans"
+      - SPRING_DATASOURCE_URL="jdbc:postgresql://loansdb:5433/loansdb"
     networks:
       - nimbus
 networks:
