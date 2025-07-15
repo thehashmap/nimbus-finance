@@ -14,6 +14,22 @@ spring:
   sql:
     init:
       mode: always
+  application:
+    name: loans
+  cloud:
+    config:
+      enabled: false
+      import-check:
+        enabled: false
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8070/eureka/
 
 build:
   version: 1.0.0
