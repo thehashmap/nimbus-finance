@@ -48,8 +48,25 @@ services:
       retries: 5
     networks:
       - nimbus
+  eurekaserver:
+    build:
+      context: ./eurekaserver
+    container_name: eurekaserver-service
+    ports:
+      - "8070:8070"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+      - SPRING_APPLICATION_NAME="eurekaserver"
+    networks:
+      - nimbus
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8070/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   accounts:
-    image: "thehashmap/accounts:latest"
+    build:
+      context: ./accounts
     container_name: accounts-service
     ports:
       - "8080:8080"
@@ -59,11 +76,12 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=default
       - SPRING_APPLICATION_NAME="accounts"
-      - SPRING_DATASOURCE_URL="jdbc:postgresql://accountsdb:5432/accountsdb"
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://accountsdb:5432/accountsdb
     networks:
       - nimbus
   cards:
-    image: "thehashmap/cards:latest"
+    build:
+      context: ./cards
     container_name: cards-service
     ports:
       - "9000:9000"
@@ -73,11 +91,12 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=default
       - SPRING_APPLICATION_NAME="cards"
-      - SPRING_DATASOURCE_URL="jdbc:postgresql://cardsdb:5432/cardsdb"
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://cardsdb:5432/cardsdb
     networks:
       - nimbus
   loans:
-    image: "thehashmap/loans:latest"
+    build:
+      context: ./loans
     container_name: loans-service
     ports:
       - "8090:8090"
@@ -87,7 +106,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=default
       - SPRING_APPLICATION_NAME="loans"
-      - SPRING_DATASOURCE_URL="jdbc:postgresql://loansdb:5432/loansdb"
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://loansdb:5432/loansdb
     networks:
       - nimbus
 networks:
